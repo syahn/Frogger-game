@@ -23,8 +23,11 @@ Enemy.prototype.update = function(dt) {
     } else {
         this.x = -100;
     }
-	// console.log(this.x, this.y);
+	// console.log(this.x, player.x);
 
+	// if(this.x === player.x){
+	// 	player.x = 202;
+	// }
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
@@ -44,6 +47,7 @@ var Player = function(){
 };
 
 Player.prototype.update = function(dt) {
+
 };
 
 Player.prototype.render = function() {
@@ -61,15 +65,17 @@ Player.prototype.handleInput = function(key) {
         } else if (this.y !== -11 && key === 'up'){
             this.y -= 83;
         }
+		if (this.y === -11){
+			player.reset();
+		}
 		console.log(this.x, this.y);
 }
 
 Player.prototype.reset = function() {
-	if (this.y === -11){
 		this.x = 202;
 		this.y = 404;
 	}
-}
+
 
 
 // Now instantiate your objects.
@@ -77,7 +83,7 @@ Player.prototype.reset = function() {
 // Place the player object in a variable called player
 var firstEnemy = new Enemy();
 firstEnemy.x = -101;
-firstEnemy.y = 60;
+firstEnemy.y = 62;
 
 var secondEnemy = new Enemy();
 secondEnemy.x = -101;
