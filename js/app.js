@@ -23,6 +23,7 @@ Enemy.prototype.update = function(dt) {
     } else {
         this.x = -100;
     }
+	// console.log(this.x, this.y);
 
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
@@ -35,9 +36,7 @@ Enemy.prototype.render = function() {
 };
 
 
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
+
 var Player = function(){
     this.x = 202;
     this.y = 404;
@@ -63,6 +62,13 @@ Player.prototype.handleInput = function(key) {
             this.y -= 83;
         }
 		console.log(this.x, this.y);
+}
+
+Player.prototype.reset = function() {
+	if (this.y === -11){
+		this.x = 202;
+		this.y = 404;
+	}
 }
 
 
