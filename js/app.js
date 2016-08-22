@@ -7,6 +7,10 @@ function getRandomInt(min, max) {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+/*
+ *
+ */
+
 var Enemy = function() {
     this.x;
     this.y;
@@ -33,15 +37,22 @@ Enemy.prototype.render = function() {
 
 
 
+// Player
+
+
 var Player = function(){
     this.x = 202;
     this.y = 404;
     this.sprite = 'images/char-boy.png';
-	this.score = 0;
+	this.life = 'images/Heart.png';
+	this.health = 3;
 };
 
 Player.prototype.update = function(dt) {
-
+	if (this.y === -11){
+		player.reset();
+		player.health -= 1;
+	}
 };
 
 Player.prototype.render = function() {
@@ -59,10 +70,7 @@ Player.prototype.handleInput = function(key) {
         } else if (this.y !== -11 && key === 'up'){
             this.y -= 83;
         }
-		if (this.y === -11){
-			player.reset();
-			player.score += 1;
-		}
+
 }
 
 Player.prototype.reset = function() {

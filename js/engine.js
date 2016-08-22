@@ -21,13 +21,36 @@ var Engine = (function(global) {
      */
     var doc = global.document,
         win = global.window,
+        // Canvas for gameplay
         canvas = doc.createElement('canvas'),
         ctx = canvas.getContext('2d'),
+        // Canvas for scoreboard
+        canvas_board = doc.createElement('canvas'),
+        ctxBoard = canvas_board.getContext('2d'),
         lastTime;
+
+    canvas_board.width = 505;
+    canvas_board.height = 63;
+    canvas_board.id = 'scoreboard';
+    doc.body.appendChild(canvas_board);
 
     canvas.width = 505;
     canvas.height = 606;
+    canvas.id = 'playscreen';
     doc.body.appendChild(canvas);
+
+    var img = document.createElement("img");
+    img.src = "images/logo.png";
+
+
+    ctxBoard.font = "48px helvetica";
+    // ctxBoard.drawImage(img, 60, 50);
+    img.addEventListener("load", function() {
+        ctxBoard.drawImage(img, 35, 15);
+    });
+    // ctxBoard.drawImage(img.src, 0, -20, 51, 86);
+
+
 
     /* This function serves as the kickoff point for the game loop itself
      * and handles properly calling the update and render methods.
@@ -148,7 +171,6 @@ var Engine = (function(global) {
         }
 
         renderEntities();
-        renderScore();
     }
 
     /* This function is called by the render function and is called on each game
@@ -162,13 +184,12 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             enemy.render();
         });
-
         player.render();
+        player.update();
+
+
     }
 
-    // function renderScore() {
-    //     ctx.strokeText(player.score, 0, 70);
-    // }
 
     /* This function does nothing but it could have been a good place to
      * handle game reset states - maybe a new game menu or a game over screen
@@ -182,7 +203,7 @@ var Engine = (function(global) {
     }
 
     function renderBgm() {
-        var bgm = "<audio autoplay='autoplay' loop='loop'><source src='audios/jazzy-duck-short.wav'></audio>";
+        var bgm = "<audio autoplay='autoplay' loop='loop'><source src='audios/Brave World.wav'></audio>";
         $('body').append(bgm);
     }
 
@@ -195,7 +216,8 @@ var Engine = (function(global) {
         'images/water-block.png',
         'images/grass-block.png',
         'images/enemy-bug.png',
-        'images/char-boy.png'
+        'images/char-boy.png',
+        'images/Heart.png'
     ]);
     Resources.onReady(init);
 
