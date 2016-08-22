@@ -12,6 +12,7 @@ var Enemy = function() {
     this.y;
     this.speed = getRandomInt(100,300);
     this.sprite = 'images/enemy-bug.png';
+
 };
 
 // Update the enemy's position, required method for game
@@ -21,16 +22,8 @@ Enemy.prototype.update = function(dt) {
     if(this.x < 500){
         this.x += this.speed * dt;
     } else {
-        this.x = -100;
+        this.x = -Math.random() * 300;
     }
-	// console.log(this.x, player.x);
-
-	// if(this.x === player.x){
-	// 	player.x = 202;
-	// }
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
 };
 
 // Draw the enemy on the screen, required method for game
@@ -44,6 +37,7 @@ var Player = function(){
     this.x = 202;
     this.y = 404;
     this.sprite = 'images/char-boy.png';
+	this.score = 0;
 };
 
 Player.prototype.update = function(dt) {
@@ -67,8 +61,8 @@ Player.prototype.handleInput = function(key) {
         }
 		if (this.y === -11){
 			player.reset();
+			player.score += 1;
 		}
-		console.log(this.x, this.y);
 }
 
 Player.prototype.reset = function() {
@@ -93,15 +87,24 @@ var thirdEnemy = new Enemy();
 thirdEnemy.x = -101;
 thirdEnemy.y = 228;
 
+var forthEnemy = new Enemy();
+forthEnemy.x = -505;
+forthEnemy.y = 62;
+
+var fifthEnemy = new Enemy();
+fifthEnemy.x = -303;
+fifthEnemy.y = 145;
+
+var sixthEnemy = new Enemy();
+sixthEnemy.x = -404;
+sixthEnemy.y = 228;
 
 
-var allEnemies = [firstEnemy, secondEnemy, thirdEnemy];
+
+var allEnemies = [firstEnemy, secondEnemy, thirdEnemy, forthEnemy, fifthEnemy, sixthEnemy];
 var player = new Player();
 
 
-
-// This listens for key presses and sends the keys to your
-// Player.handleInput() method. You don't need to modify this.
 document.addEventListener('keyup', function(e) {
     var allowedKeys = {
         37: 'left',

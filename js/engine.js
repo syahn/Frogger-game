@@ -64,6 +64,7 @@ var Engine = (function(global) {
      * game loop.
      */
     function init() {
+        renderBgm();
         reset();
         lastTime = Date.now();
         main();
@@ -147,6 +148,7 @@ var Engine = (function(global) {
         }
 
         renderEntities();
+        renderScore();
     }
 
     /* This function is called by the render function and is called on each game
@@ -164,6 +166,10 @@ var Engine = (function(global) {
         player.render();
     }
 
+    // function renderScore() {
+    //     ctx.strokeText(player.score, 0, 70);
+    // }
+
     /* This function does nothing but it could have been a good place to
      * handle game reset states - maybe a new game menu or a game over screen
      * those sorts of things. It's only called once by the init() method.
@@ -173,7 +179,11 @@ var Engine = (function(global) {
             player.x = 202;
             player.y = 404;
         }
+    }
 
+    function renderBgm() {
+        var bgm = "<audio autoplay='autoplay' loop='loop'><source src='audios/jazzy-duck-short.wav'></audio>";
+        $('body').append(bgm);
     }
 
     /* Go ahead and load all of the images we know we're going to need to
