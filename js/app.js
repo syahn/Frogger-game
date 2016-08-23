@@ -44,15 +44,24 @@ var Player = function(){
     this.x = 202;
     this.y = 404;
     this.sprite = 'images/char-boy.png';
-	this.life = 'images/Heart.png';
-	this.health = 3;
+	this.logoLife = 'images/Heart.png';
+	this.numLife = 3;
 };
 
 Player.prototype.update = function(dt) {
 	if (this.y === -11){
 		player.reset();
-		player.health -= 1;
 	}
+	if (this.numLife === 0){
+		alert("GAME OVER!");
+		window.location.reload(true);
+	}
+};
+
+Player.prototype.life = function() {
+	ctx.font = "32px helvetica";
+	ctx.fillText(this.numLife, 45, 575);
+	ctx.drawImage(Resources.get(this.logoLife), 5, 535, 32, 54);
 };
 
 Player.prototype.render = function() {
@@ -60,7 +69,6 @@ Player.prototype.render = function() {
 };
 
 Player.prototype.handleInput = function(key) {
-
         if (this.x > 0 && key === 'left' ){
             this.x -= 101;
         } else if (this.x < 404 && key === 'right'){
@@ -70,7 +78,6 @@ Player.prototype.handleInput = function(key) {
         } else if (this.y !== -11 && key === 'up'){
             this.y -= 83;
         }
-
 }
 
 Player.prototype.reset = function() {

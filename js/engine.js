@@ -25,30 +25,31 @@ var Engine = (function(global) {
         canvas = doc.createElement('canvas'),
         ctx = canvas.getContext('2d'),
         // Canvas for scoreboard
-        canvas_board = doc.createElement('canvas'),
-        ctxBoard = canvas_board.getContext('2d'),
+        canvasBoard = doc.createElement('canvas'),
+        ctxBoard = canvasBoard.getContext('2d'),
         lastTime;
 
-    canvas_board.width = 505;
-    canvas_board.height = 63;
-    canvas_board.id = 'scoreboard';
-    doc.body.appendChild(canvas_board);
+    //Render the header board
+    canvasBoard.width = 505;
+    canvasBoard.height = 63;
+    canvasBoard.id = 'scoreboard';
+    doc.body.appendChild(canvasBoard);
 
+    //Render the playscreen
     canvas.width = 505;
     canvas.height = 606;
     canvas.id = 'playscreen';
     doc.body.appendChild(canvas);
 
+    //Render the logo title on the header board
     var img = document.createElement("img");
     img.src = "images/logo.png";
-
-
-    ctxBoard.font = "48px helvetica";
-    // ctxBoard.drawImage(img, 60, 50);
     img.addEventListener("load", function() {
         ctxBoard.drawImage(img, 35, 15);
     });
-    // ctxBoard.drawImage(img.src, 0, -20, 51, 86);
+
+    // ctx.fillText("heffdsfsy", 10, 500);
+
 
 
 
@@ -127,6 +128,7 @@ var Engine = (function(global) {
                 (player.x - enemy.x) < 75 &&
                 (player.x - enemy.x) > -75 ){
                 player.reset();
+                player.numLife -= 1;
             }
         });
     }
@@ -167,10 +169,11 @@ var Engine = (function(global) {
                  * we're using them over and over.
                  */
                 ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
+
             }
         }
-
         renderEntities();
+
     }
 
     /* This function is called by the render function and is called on each game
@@ -186,8 +189,7 @@ var Engine = (function(global) {
         });
         player.render();
         player.update();
-
-
+        player.life();
     }
 
 
@@ -202,10 +204,20 @@ var Engine = (function(global) {
         }
     }
 
+    // Render the background music
     function renderBgm() {
         var bgm = "<audio autoplay='autoplay' loop='loop'><source src='audios/Brave World.wav'></audio>";
-        $('body').append(bgm);
+        // $('body').append(bgm);
     }
+
+    // function renderLife() {
+    //     var imgLife = document.createElement("img");
+    //     imgLife.src = "images/Heart.png";
+    //     imgLife.addEventListener("load", function() {
+    //         ctx.drawImage(imgLife, 10, 505);
+    //     });
+    // }
+
 
     /* Go ahead and load all of the images we know we're going to need to
      * draw our game level. Then set init as the callback method, so that when
