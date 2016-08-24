@@ -27,6 +27,7 @@ var Engine = (function(global) {
         // Canvas for scoreboard
         canvasBoard = doc.createElement('canvas'),
         ctxBoard = canvasBoard.getContext('2d'),
+        // colorCount = 0,
         lastTime;
 
     //Render the header board
@@ -40,19 +41,6 @@ var Engine = (function(global) {
     canvas.height = 606;
     canvas.id = 'playscreen';
     doc.body.appendChild(canvas);
-
-    //Render the logo title on the header board
-    var img = document.createElement("img");
-    img.src = "images/logo.png";
-    img.addEventListener("load", function() {
-        ctxBoard.drawImage(img, 35, 15);
-    });
-
-    // var music = new Audio("audios/Brave World.wav");
-
-    // ctx.fillText("heffdsfsy", 10, 500);
-
-
 
 
     /* This function serves as the kickoff point for the game loop itself
@@ -83,6 +71,7 @@ var Engine = (function(global) {
          * function again as soon as the browser is able to draw another frame.
          */
         win.requestAnimationFrame(main);
+
     }
 
     /* This function does some initial setup that should only occur once,
@@ -90,8 +79,9 @@ var Engine = (function(global) {
      * game loop.
      */
     function init() {
-        // renderBgm();
-        reset();
+        renderBgm();
+        renderLogo();
+        player.reset();
         lastTime = Date.now();
         main();
     }
@@ -125,6 +115,7 @@ var Engine = (function(global) {
     }
 
     function checkCollisions() {
+        // check collisions between player and enemies
         allEnemies.forEach(function(enemy) {
             if ((player.y - enemy.y) === 10 &&
                 (player.x - enemy.x) < 75 &&
@@ -134,7 +125,15 @@ var Engine = (function(global) {
                 player.numLife -= 1;
             }
         });
+
+        if ((player.x - gem.x) === 10 &&
+            (player.y - gem.y) === 10 ){
+                 player.reset();
+                 player.numLife += 1;
+             }
     }
+
+
 
     /* This function initially draws the "game level", it will then call
      * the renderEntities function. Remember, this function is called every
@@ -193,6 +192,10 @@ var Engine = (function(global) {
         player.render();
         player.update();
         player.life();
+
+        gem.render();
+        // gemBlue.render();
+        // gemOrange.render();
     }
 
 
@@ -200,12 +203,10 @@ var Engine = (function(global) {
      * handle game reset states - maybe a new game menu or a game over screen
      * those sorts of things. It's only called once by the init() method.
      */
-    function reset() {
-        if (player.x === -11){
-            player.x = 202;
-            player.y = 404;
-        }
-    }
+    // function reset() {
+    //     player.x = 202;
+    //     player.y = 404;
+    // }
 
     // Render the background music
     function renderBgm() {
@@ -213,6 +214,12 @@ var Engine = (function(global) {
         $('body').append(bgm);
         var backgroundSound = document.getElementById('backgroundSound')
         backgroundSound.volume = 0.15;
+    }
+
+    //Render the logo title on the header board
+    function renderLogo(){
+        var logo = 'images/logo.png';
+        ctxBoard.drawImage(Resources.get(logo), 35, 15);
     }
 
 
@@ -226,7 +233,11 @@ var Engine = (function(global) {
         'images/grass-block.png',
         'images/enemy-bug.png',
         'images/char-boy.png',
-        'images/Heart.png'
+        'images/Heart.png',
+        'images/Gem Green.png',
+        'images/Gem Blue.png',
+        'images/Gem Orange.png',
+        'images/logo.png'
     ]);
     Resources.onReady(init);
 

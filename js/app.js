@@ -1,4 +1,22 @@
 
+////////////////////////////////////////////////////////////////////////
+// Table of contents
+// 01. Enemy object
+// 02. Player object
+// 03. Gem object
+////////////////////////////////////////////////////////////////////////
+
+
+
+// 01. Enemy object
+
+var Enemy = function() {
+    this.x;
+    this.y;
+    this.speed = getRandomInt(100,300);
+    this.sprite = 'images/enemy-bug.png';
+};
+
 /*
  * Returns a random integer between min (inclusive) and max (inclusive)
  * Using Math.round() will give you a non-uniform distribution!
@@ -6,18 +24,6 @@
 function getRandomInt(min, max) {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-
-/*
- *
- */
-
-var Enemy = function() {
-    this.x;
-    this.y;
-    this.speed = getRandomInt(100,300);
-    this.sprite = 'images/enemy-bug.png';
-
-};
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
@@ -37,8 +43,7 @@ Enemy.prototype.render = function() {
 
 
 
-// Player
-
+// 02. Player Object
 
 var Player = function(){
     this.x = 202;
@@ -52,14 +57,17 @@ var Player = function(){
 	this.effectMove.volume = 0.5;
 	this.effectDamage = new Audio("audios/Damage.wav");
 	this.effectDamage.volume = 0.5;
-
-
 };
 
 Player.prototype.update = function(dt) {
-	if (this.y === -11){
-		player.reset();
+	if (this.y === -11 && (gem.x - this.x) === 20 ){
+		this.reset();
+		this.numLife += 1;
+	} else if (this.y === -11) {
+		this.reset();
+		this.numLife += 1;
 	}
+
 	if (this.numLife === 0){
 		alert("GAME OVER!");
 		window.location.reload(true);
@@ -76,21 +84,21 @@ Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-Player.prototype.effectSound = function() {
-}
-
 Player.prototype.handleInput = function(key) {
         if (this.x > 0 && key === 'left' ){
             this.x -= 101;
-
+			console.log(this.x, this.y);
         } else if (this.x < 404 && key === 'right'){
             this.x += 101;
+			console.log(this.x, this.y);
 
         } else if (this.y !== 404 && key === 'down'){
             this.y += 83;
+			console.log(this.x, this.y);
 
         } else if (this.y !== -11 && key === 'up'){
             this.y -= 83;
+			console.log(this.x, this.y);
 
         }
 }
@@ -98,7 +106,61 @@ Player.prototype.handleInput = function(key) {
 Player.prototype.reset = function() {
 		this.x = 202;
 		this.y = 404;
+		gem = new Gem(colorSelector());
 	}
+
+
+// 03. Gem object
+
+var Gem = function(color) {
+	this.x = [20, 121, 222, 323, 424][getRandomInt(0,4)];
+	this.y = 25 ;
+
+	if (color === 'green')
+		this.color = 'images/Gem Green.png';
+	else if (color === 'blue')
+		this.color = 'images/Gem Blue.png';
+	else if (color === 'orange')
+		this.color = 'images/Gem Orange.png';
+	else
+		this.color = undefined;
+}
+
+Gem.prototype.render = function() {
+    ctx.drawImage(Resources.get(this.color), this.x, this.y, 61, 103);
+};
+
+
+// var gem = new Gem(colorSelector()[colorCount]);
+// var gemBlue = new Gem('blue');
+// var gemOrange = new Gem('orange');
+
+
+// This function select random property from the object for colorSelector
+// function.
+function randomProperty(obj) {
+    var keys = Object.keys(obj)
+    return obj[keys[ keys.length * Math.random() << 0]];
+};
+
+// This function
+function colorSelector(){
+	var colors = {
+		green: 'green',
+		blue: 'blue',
+		orange: 'orange'
+		};
+	return randomProperty(colors);
+	// var first = randomProperty(colors);
+	// delete colors[first];
+	// var second = randomProperty(colors);
+	// delete colors[second];
+	// var third = randomProperty(colors);
+	//
+	// var orderColor = [first, second, third];
+
+	// return orderColor;
+}
 
 
 
@@ -129,14 +191,13 @@ var sixthEnemy = new Enemy();
 sixthEnemy.x = -404;
 sixthEnemy.y = 228;
 
-
-
 var allEnemies = [firstEnemy, secondEnemy, thirdEnemy, forthEnemy, fifthEnemy, sixthEnemy];
+
+
 var player = new Player();
 
 
 document.addEventListener('keyup', function(e) {
-
 	player.effectMove.play();
     var allowedKeys = {
         37: 'left',
