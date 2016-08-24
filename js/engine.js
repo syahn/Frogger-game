@@ -48,6 +48,8 @@ var Engine = (function(global) {
         ctxBoard.drawImage(img, 35, 15);
     });
 
+    // var music = new Audio("audios/Brave World.wav");
+
     // ctx.fillText("heffdsfsy", 10, 500);
 
 
@@ -88,7 +90,7 @@ var Engine = (function(global) {
      * game loop.
      */
     function init() {
-        renderBgm();
+        // renderBgm();
         reset();
         lastTime = Date.now();
         main();
@@ -127,6 +129,7 @@ var Engine = (function(global) {
             if ((player.y - enemy.y) === 10 &&
                 (player.x - enemy.x) < 75 &&
                 (player.x - enemy.x) > -75 ){
+                player.effectDamage.play();
                 player.reset();
                 player.numLife -= 1;
             }
@@ -206,17 +209,11 @@ var Engine = (function(global) {
 
     // Render the background music
     function renderBgm() {
-        var bgm = "<audio autoplay='autoplay' loop='loop'><source src='audios/Brave World.wav'></audio>";
-        // $('body').append(bgm);
+        var bgm = "<audio id = 'backgroundSound' autoplay='autoplay' loop='loop'><source src='audios/Brave World.wav'></audio>";
+        $('body').append(bgm);
+        var backgroundSound = document.getElementById('backgroundSound')
+        backgroundSound.volume = 0.15;
     }
-
-    // function renderLife() {
-    //     var imgLife = document.createElement("img");
-    //     imgLife.src = "images/Heart.png";
-    //     imgLife.addEventListener("load", function() {
-    //         ctx.drawImage(imgLife, 10, 505);
-    //     });
-    // }
 
 
     /* Go ahead and load all of the images we know we're going to need to

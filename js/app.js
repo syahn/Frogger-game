@@ -46,6 +46,14 @@ var Player = function(){
     this.sprite = 'images/char-boy.png';
 	this.logoLife = 'images/Heart.png';
 	this.numLife = 3;
+
+	// Give sound effect to movement of player
+	this.effectMove = new Audio("audios/Move3.wav");
+	this.effectMove.volume = 0.5;
+	this.effectDamage = new Audio("audios/Damage.wav");
+	this.effectDamage.volume = 0.5;
+
+
 };
 
 Player.prototype.update = function(dt) {
@@ -68,15 +76,22 @@ Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
+Player.prototype.effectSound = function() {
+}
+
 Player.prototype.handleInput = function(key) {
         if (this.x > 0 && key === 'left' ){
             this.x -= 101;
+
         } else if (this.x < 404 && key === 'right'){
             this.x += 101;
+
         } else if (this.y !== 404 && key === 'down'){
             this.y += 83;
+
         } else if (this.y !== -11 && key === 'up'){
             this.y -= 83;
+
         }
 }
 
@@ -121,12 +136,13 @@ var player = new Player();
 
 
 document.addEventListener('keyup', function(e) {
+
+	player.effectMove.play();
     var allowedKeys = {
         37: 'left',
         38: 'up',
         39: 'right',
         40: 'down'
     };
-
     player.handleInput(allowedKeys[e.keyCode]);
 });
