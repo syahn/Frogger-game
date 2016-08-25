@@ -49,7 +49,7 @@ var Player = function(){
     this.x = 202;
     this.y = 404;
     this.sprite = 'images/char-boy.png';
-	this.logoLife = 'images/Heart.png';
+
 	this.numLife = 3;
 	this.whichColor;
 
@@ -73,38 +73,35 @@ Player.prototype.update = function(dt) {
 		this.effectGem.play();
 
 		if (gem.Color === 'green'){
-			console.log(gem.Color);
 			this.scoreGreen += 1;
-		}
-
-		else if (gem.Color === 'blue') {
+		} else if (gem.Color === 'blue') {
 			this.scoreBlue += 1;
-			console.log(gem.Color);
-		}
-
-
-		else if (gem.Color === 'orange') {
+		} else if (gem.Color === 'orange') {
 			this.scoreOrange += 1;
-			console.log(gem.Color);
 		}
+
 		this.reset();
 
 	} else if (this.y === -11) {
-		this.reset();
 		player.effectReset.play();
+
+		life.x = [20, 121, 222, 323, 424][getRandomInt(0,4)];
+		life.y = [281, 198, 115][getRandomInt(0,2)];
+
+		this.reset();
+
+	} else if (Math.abs(life.x - this.x) === 20  && Math.abs(life.y - this.y) === 43 ){
+		life.effectLife.play();
 		this.numLife += 1;
+
+		life.x = undefined;
+		life.y = undefined;
 	}
 
 	if (this.numLife === 0){
 		alert("GAME OVER!");
 		window.location.reload(true);
 	}
-};
-
-Player.prototype.life = function() {
-	ctx.font = "32px helvetica";
-	ctx.fillText(this.numLife, 45, 575);
-	ctx.drawImage(Resources.get(this.logoLife), 5, 535, 32, 54);
 };
 
 
@@ -130,8 +127,6 @@ Player.prototype.reset = function() {
 
 		gem.x = [20, 121, 222, 323, 424][getRandomInt(0,4)];
 		gem.Color = ['green', 'blue', 'orange'][getRandomInt(0,2)];
-		// gem = new Gem(colorSelector());
-		// this.whichColor = gem.Color;
 }
 
 
@@ -170,9 +165,27 @@ Gem.prototype.update = function() {
 	ctx.fillText(player.scoreOrange + "/3", 248 + 202, 574);
 };
 
-// var gem = new Gem(colorSelector());
+//04. Life object
 
-// this.whichColor = gem.Color;
+var Life = function() {
+	this.x = [20, 121, 222, 323, 424][getRandomInt(0,4)];
+	this.y = [281, 198, 115][getRandomInt(0,2)]; //238(43), 155(43), 72(43)
+	this.imageLife = "images/Heart.png";
+
+	this.effectLife = new Audio("audios/Life.wav");
+	this.effectLife.volume = 0.5;
+}
+
+Life.prototype.render = function() {
+	ctx.font = "32px helvetica";
+	ctx.fillText(player.numLife, 45, 575);
+	ctx.drawImage(Resources.get(this.imageLife), 5, 535, 32, 54);
+};
+
+Life.prototype.update = function() {
+	ctx.drawImage(Resources.get(this.imageLife), this.x, this.y, 64, 108);
+}
+
 
 
 // This function select random property from the object for colorSelector
@@ -226,6 +239,7 @@ sixthEnemy.y = 228;
 var allEnemies = [firstEnemy, secondEnemy, thirdEnemy, forthEnemy, fifthEnemy, sixthEnemy];
 var player = new Player();
 var gem = new Gem(colorSelector());
+var life = new Life();
 
 
 
