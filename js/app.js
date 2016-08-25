@@ -4,9 +4,29 @@
 // 01. Enemy object
 // 02. Player object
 // 03. Gem object
+// 03. Life object
 ////////////////////////////////////////////////////////////////////////
 
+// 00. Setup object
 
+var Setup = function() {
+	this.pause = 0;
+
+	this.soundPause = new Audio("audios/Pause.wav");
+	this.soundPause.volume = 0.2;
+
+};
+
+Setup.prototype.handleInput = function(key) {
+	if (key === 'space'){
+		this.pause = (this.pause + 1) % 2;
+		backgroundSound.pause();
+		setup.soundPause.play();
+	}
+
+}
+
+var setup = new Setup();
 
 // 01. Enemy object
 
@@ -58,19 +78,19 @@ var Player = function(){
 	this.scoreOrange = 0;
 
 	// Give sound effect to movement of player
-	this.effectMove = new Audio("audios/Move.wav");
-	this.effectMove.volume = 0.5;
-	this.effectDamage = new Audio("audios/Damage.wav");
-	this.effectDamage.volume = 0.5;
-	this.effectGem = new Audio("audios/Gem.wav");
-	this.effectGem.volume = 0.5;
-	this.effectReset = new Audio("audios/Reset.wav");
-	this.effectReset.volume = 0.5;
+	this.soundMove = new Audio("audios/Move.wav");
+	this.soundMove.volume = 0.5;
+	this.soundDamage = new Audio("audios/Damage.wav");
+	this.soundDamage.volume = 0.5;
+	this.soundGem = new Audio("audios/Gem.wav");
+	this.soundGem.volume = 0.5;
+	this.soundReset = new Audio("audios/Reset.wav");
+	this.soundReset.volume = 0.5;
 };
 
 Player.prototype.update = function(dt) {
 	if (this.y === -11 && (gem.x - this.x) === 20 ){
-		this.effectGem.play();
+		this.soundGem.play();
 
 		if (gem.Color === 'green'){
 			this.scoreGreen += 1;
@@ -83,7 +103,7 @@ Player.prototype.update = function(dt) {
 		this.reset();
 
 	} else if (this.y === -11) {
-		player.effectReset.play();
+		player.soundReset.play();
 
 		life.x = [20, 121, 222, 323, 424][getRandomInt(0,4)];
 		life.y = [281, 198, 115][getRandomInt(0,2)];
@@ -91,7 +111,7 @@ Player.prototype.update = function(dt) {
 		this.reset();
 
 	} else if (Math.abs(life.x - this.x) === 20  && Math.abs(life.y - this.y) === 43 ){
-		life.effectLife.play();
+		life.soundLife.play();
 		this.numLife += 1;
 
 		life.x = undefined;
@@ -102,7 +122,7 @@ Player.prototype.update = function(dt) {
 	if (this.scoreGreen >= 3 && this.scoreBlue >= 3 && this.scoreOrange >= 3) {
 		alert("YOU WIN!");
 		window.location.reload(true);
-		
+
 	} else if (this.numLife === 0){
 		alert("GAME OVER!");
 		window.location.reload(true);
@@ -115,13 +135,18 @@ Player.prototype.render = function() {
 };
 
 Player.prototype.handleInput = function(key) {
+
         if (this.x > 0 && key === 'left' ){
+			player.soundMove.play();
             this.x -= 101;
         } else if (this.x < 404 && key === 'right'){
+			player.soundMove.play();
             this.x += 101;
         } else if (this.y !== 404 && key === 'down'){
+			player.soundMove.play();
             this.y += 83;
         } else if (this.y !== -11 && key === 'up'){
+			player.soundMove.play();
             this.y -= 83;
         }
 }
@@ -184,8 +209,8 @@ var Life = function() {
 	this.y = [281, 198, 115][getRandomInt(0,2)]; //238(43), 155(43), 72(43)
 	this.imageLife = "images/Heart.png";
 
-	this.effectLife = new Audio("audios/Life.wav");
-	this.effectLife.volume = 0.5;
+	this.soundLife = new Audio("audios/Life.wav");
+	this.soundLife.volume = 0.2;
 }
 
 Life.prototype.render = function() {
@@ -256,12 +281,14 @@ var life = new Life();
 
 
 document.addEventListener('keyup', function(e) {
-	player.effectMove.play();
+
     var allowedKeys = {
+		32: 'space',
         37: 'left',
         38: 'up',
         39: 'right',
         40: 'down'
     };
     player.handleInput(allowedKeys[e.keyCode]);
+    setup.handleInput(allowedKeys[e.keyCode]);
 });

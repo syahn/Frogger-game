@@ -61,8 +61,12 @@ var Engine = (function(global) {
         /* Call our update/render functions, pass along the time delta to
          * our update function since it may be used for smooth animation.
          */
-        update(dt);
-        render();
+        if (!setup.pause){
+            update(dt);
+            render();
+            backgroundSound.play();
+        }
+
 
         /* Set our lastTime variable which is used to determine the time delta
          * for the next time this function is called.
@@ -122,7 +126,7 @@ var Engine = (function(global) {
             if ((player.y - enemy.y) === 10 &&
                 (player.x - enemy.x) < 75 &&
                 (player.x - enemy.x) > -75 ){
-                player.effectDamage.play();
+                player.soundDamage.play();
                 player.reset();
                 player.numLife -= 1;
             }
@@ -207,10 +211,6 @@ var Engine = (function(global) {
      * handle game reset states - maybe a new game menu or a game over screen
      * those sorts of things. It's only called once by the init() method.
      */
-    // function reset() {
-    //     player.x = 202;
-    //     player.y = 404;
-    // }
 
     // Render the background music
     function renderBgm() {
