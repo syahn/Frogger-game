@@ -43,6 +43,8 @@ var Engine = (function(global) {
     doc.body.appendChild(canvas);
 
 
+
+
     /* This function serves as the kickoff point for the game loop itself
      * and handles properly calling the update and render methods.
      */
@@ -81,7 +83,6 @@ var Engine = (function(global) {
     function init() {
         renderBgm();
         renderLogo();
-        player.reset();
         lastTime = Date.now();
         main();
     }
@@ -111,7 +112,9 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
+
         player.update();
+        gem.update();
     }
 
     function checkCollisions() {
@@ -190,10 +193,14 @@ var Engine = (function(global) {
             enemy.render();
         });
         player.render();
-        player.update();
         player.life();
 
+        // player.update();
+        // player.life();
+
         gem.render();
+        gem.update();
+
         // gemBlue.render();
         // gemOrange.render();
     }

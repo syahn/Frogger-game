@@ -51,20 +51,47 @@ var Player = function(){
     this.sprite = 'images/char-boy.png';
 	this.logoLife = 'images/Heart.png';
 	this.numLife = 3;
+	this.whichColor;
+
+	this.scoreGreen = 0;
+	this.scoreBlue = 0;
+	this.scoreOrange = 0;
 
 	// Give sound effect to movement of player
-	this.effectMove = new Audio("audios/Move3.wav");
+	this.effectMove = new Audio("audios/Move.wav");
 	this.effectMove.volume = 0.5;
 	this.effectDamage = new Audio("audios/Damage.wav");
 	this.effectDamage.volume = 0.5;
+	this.effectGem = new Audio("audios/Gem.wav");
+	this.effectGem.volume = 0.5;
+	this.effectReset = new Audio("audios/Reset.wav");
+	this.effectReset.volume = 0.5;
 };
 
 Player.prototype.update = function(dt) {
 	if (this.y === -11 && (gem.x - this.x) === 20 ){
+		this.effectGem.play();
+
+		if (gem.Color === 'green'){
+			console.log(gem.Color);
+			this.scoreGreen += 1;
+		}
+
+		else if (gem.Color === 'blue') {
+			this.scoreBlue += 1;
+			console.log(gem.Color);
+		}
+
+
+		else if (gem.Color === 'orange') {
+			this.scoreOrange += 1;
+			console.log(gem.Color);
+		}
 		this.reset();
-		this.numLife += 1;
+
 	} else if (this.y === -11) {
 		this.reset();
+		player.effectReset.play();
 		this.numLife += 1;
 	}
 
@@ -80,6 +107,7 @@ Player.prototype.life = function() {
 	ctx.drawImage(Resources.get(this.logoLife), 5, 535, 32, 54);
 };
 
+
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
@@ -87,27 +115,24 @@ Player.prototype.render = function() {
 Player.prototype.handleInput = function(key) {
         if (this.x > 0 && key === 'left' ){
             this.x -= 101;
-			console.log(this.x, this.y);
         } else if (this.x < 404 && key === 'right'){
             this.x += 101;
-			console.log(this.x, this.y);
-
         } else if (this.y !== 404 && key === 'down'){
             this.y += 83;
-			console.log(this.x, this.y);
-
         } else if (this.y !== -11 && key === 'up'){
             this.y -= 83;
-			console.log(this.x, this.y);
-
         }
 }
 
 Player.prototype.reset = function() {
 		this.x = 202;
 		this.y = 404;
-		gem = new Gem(colorSelector());
-	}
+
+		gem.x = [20, 121, 222, 323, 424][getRandomInt(0,4)];
+		gem.Color = ['green', 'blue', 'orange'][getRandomInt(0,2)];
+		// gem = new Gem(colorSelector());
+		// this.whichColor = gem.Color;
+}
 
 
 // 03. Gem object
@@ -115,25 +140,39 @@ Player.prototype.reset = function() {
 var Gem = function(color) {
 	this.x = [20, 121, 222, 323, 424][getRandomInt(0,4)];
 	this.y = 25 ;
+	this.Color = color;
+	this.gemColor;
 
-	if (color === 'green')
-		this.color = 'images/Gem Green.png';
-	else if (color === 'blue')
-		this.color = 'images/Gem Blue.png';
-	else if (color === 'orange')
-		this.color = 'images/Gem Orange.png';
-	else
-		this.color = undefined;
+	this.gemGreen = 'images/Gem Green.png';
+	this.gemBlue = 'images/Gem Blue.png';
+	this.gemOrange = 'images/Gem Orange.png';
 }
 
 Gem.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.color), this.x, this.y, 61, 103);
+	ctx.drawImage(Resources.get(this.gemGreen), 5+202, 530, 32, 54);
+	ctx.drawImage(Resources.get(this.gemBlue), 5+303, 530, 32, 54);
+	ctx.drawImage(Resources.get(this.gemOrange), 5+404, 530, 32, 54);
 };
 
+Gem.prototype.update = function() {
+	if (this.Color === 'green')
+		this.gemColor = 'images/Gem Green.png';
+	else if (this.Color === 'blue')
+		this.gemColor = 'images/Gem Blue.png';
+	else if (this.Color === 'orange')
+		this.gemColor = 'images/Gem Orange.png';
 
-// var gem = new Gem(colorSelector()[colorCount]);
-// var gemBlue = new Gem('blue');
-// var gemOrange = new Gem('orange');
+	ctx.drawImage(Resources.get(this.gemColor), this.x, this.y, 61, 103);
+
+	ctx.font = "24px helvetica";
+	ctx.fillText(player.scoreGreen + "/3", 248, 574);
+	ctx.fillText(player.scoreBlue + "/3", 248 + 101, 574);
+	ctx.fillText(player.scoreOrange + "/3", 248 + 202, 574);
+};
+
+// var gem = new Gem(colorSelector());
+
+// this.whichColor = gem.Color;
 
 
 // This function select random property from the object for colorSelector
@@ -151,15 +190,6 @@ function colorSelector(){
 		orange: 'orange'
 		};
 	return randomProperty(colors);
-	// var first = randomProperty(colors);
-	// delete colors[first];
-	// var second = randomProperty(colors);
-	// delete colors[second];
-	// var third = randomProperty(colors);
-	//
-	// var orderColor = [first, second, third];
-
-	// return orderColor;
 }
 
 
@@ -191,10 +221,12 @@ var sixthEnemy = new Enemy();
 sixthEnemy.x = -404;
 sixthEnemy.y = 228;
 
+
+// Iniiate entities
 var allEnemies = [firstEnemy, secondEnemy, thirdEnemy, forthEnemy, fifthEnemy, sixthEnemy];
-
-
 var player = new Player();
+var gem = new Gem(colorSelector());
+
 
 
 document.addEventListener('keyup', function(e) {
