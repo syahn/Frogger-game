@@ -61,12 +61,19 @@ var Engine = (function(global) {
         /* Call our update/render functions, pass along the time delta to
          * our update function since it may be used for smooth animation.
          */
-        if (!setup.pause){
-            update(dt);
-            render();
-            backgroundSound.play();
-        }
 
+        if (!setup.selection){ // Before selecting the character
+            setup.start();
+            setup.select();
+
+        } else { // After selecting the character
+            if (!setup.pause) { // It makes the pause feature works
+                setup.pauseScreen();
+                backgroundSound.play();
+                update(dt);
+                render();
+            }
+        }
 
         /* Set our lastTime variable which is used to determine the time delta
          * for the next time this function is called.
@@ -85,8 +92,8 @@ var Engine = (function(global) {
      * game loop.
      */
     function init() {
-        renderBgm();
-        renderLogo();
+        renderLogo(); // Render title on the top
+        renderBgm(); // Play the bgm 
         lastTime = Date.now();
         main();
     }
@@ -237,11 +244,18 @@ var Engine = (function(global) {
         'images/grass-block.png',
         'images/enemy-bug.png',
         'images/char-boy.png',
+        'images/char-cat-girl.png',
+        'images/char-horn-girl.png',
+        'images/char-pink-girl.png',
+        'images/char-princess-girl.png',
         'images/Heart.png',
         'images/Gem Green.png',
         'images/Gem Blue.png',
         'images/Gem Orange.png',
-        'images/logo.png'
+        'images/logo.png',
+        'images/Setup.png',
+        'images/Selector.png',
+        'images/Pause.png'
     ]);
     Resources.onReady(init);
 
