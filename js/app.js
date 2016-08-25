@@ -98,7 +98,12 @@ Player.prototype.update = function(dt) {
 		life.y = undefined;
 	}
 
-	if (this.numLife === 0){
+
+	if (this.scoreGreen >= 3 && this.scoreBlue >= 3 && this.scoreOrange >= 3) {
+		alert("YOU WIN!");
+		window.location.reload(true);
+		
+	} else if (this.numLife === 0){
 		alert("GAME OVER!");
 		window.location.reload(true);
 	}
@@ -160,10 +165,17 @@ Gem.prototype.update = function() {
 	ctx.drawImage(Resources.get(this.gemColor), this.x, this.y, 61, 103);
 
 	ctx.font = "24px helvetica";
+	player.scoreGreen >= 3 ? ctx.fillStyle = 'yellow' : ctx.fillStyle = 'black';
 	ctx.fillText(player.scoreGreen + "/3", 248, 574);
+
+	player.scoreBlue >= 3 ? ctx.fillStyle = 'yellow' : ctx.fillStyle = 'black';
 	ctx.fillText(player.scoreBlue + "/3", 248 + 101, 574);
+
+	player.scoreOrange >= 3 ? ctx.fillStyle = 'yellow' : ctx.fillStyle = 'black';
 	ctx.fillText(player.scoreOrange + "/3", 248 + 202, 574);
+	ctx.fillStyle = 'black';
 };
+
 
 //04. Life object
 
