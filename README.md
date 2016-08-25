@@ -2,12 +2,12 @@
 I made this with art assets and game engine provided by Udacity Front end nanodegree project.
 
 ## Play
--> [My version](https://syahn.github.io/frontend-nanodegree-arcade_game/)
+-> [My version](https://syahn.github.io/frontend-nanodegree-arcade_game/) <br>
 -> [Original demo](https://www.youtube.com/watch?v=SxeHV1kt7iU&feature=youtu.be)
 
 ## How to play
 <ol>
-    <li>Select the character </li>
+    <li> Select the character </li>
     <li> Collect 3 gems by each color </li>
     <li> If you get to the liver, you'll get </li>
 </ol>
